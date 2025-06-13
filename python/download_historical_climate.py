@@ -7,7 +7,7 @@ import csv
 from tqdm import tqdm
 
 
-def read_wget_urls(wget_file='CHELSAwget_files.txt'):
+def read_wget_urls(wget_file='data/CHELSAwget_files.txt'):
     """Read the CHELSA wget URLs from file"""
     urls = pd.read_csv(wget_file, header=None)[0].tolist()
     # Clean URLs to remove any whitespace

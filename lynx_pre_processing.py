@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+# For some reason I have to specify this, otherwise it doesn't work
 os.environ["R_HOME"] =  "C:/Users/Z1512834Z/AppData/Local/Programs/R/R-4.4.0"  
 
 import rpy2.robjects as robjects

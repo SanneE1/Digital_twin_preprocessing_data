@@ -85,10 +85,10 @@ def process_folder(folder_path):
         dir_path = os.path.dirname(asc_file)
         filename = os.path.basename(asc_file)
         
-        # Create output path with "Lynx_" prefix and .txt extension
+        # Create output path with species prefix and .txt extension
         base_name, _ = os.path.splitext(filename)
-        output_filename = f"Lynx_{base_name}.txt"
-        output_file = os.path.join(dir_path, output_filename)
+        output_filename = f"{base_name}.txt"
+        output_file = os.path.join("input_data", "maps", output_filename)
         
         # Transform the file
         transform_asc_file(asc_file, output_file)
