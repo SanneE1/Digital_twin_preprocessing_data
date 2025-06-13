@@ -22,5 +22,5 @@ subprocess.run(['Rscript', 'R/Calculate_coordinates_of_matrix.R'])
 subprocess.run(["python", "python/download_historical_climate.py"])
 
 # Formatting downloaded climate
-robjects.r.source('R/Formatting_climate_data.R')
+robjects.r.source('R/Formatting_historical_climate_data.R')
 

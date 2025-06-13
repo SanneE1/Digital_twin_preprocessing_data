@@ -5,8 +5,8 @@ library(terra)
 ## Get coordinates
 ##------------------------------------------------------
 
-rast_file_peninsula = "data/pre_processed_data/HabitatMap_500_Peninsula_Fordham_2013.asc"
-rast_file_donana = "data/pre_processed_data/HabitatMap_500_Donana_Fordham_2013.asc"
+rast_file_peninsula = "data/pre_processed_data/Rabbit_HabitatMap_500_Peninsula_Fordham_2013.asc"
+rast_file_donana = "data/pre_processed_data/Rabbit_HabitatMap_500_Donana_Fordham_2013.asc"
 
 mat_dim_p = 4822110
 mat_dim_d = 25920

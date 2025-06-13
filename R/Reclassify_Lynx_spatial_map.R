@@ -68,11 +68,11 @@ reproj_donana2 <- resample(reclas_donana2, donana_template, method = "mode")
 
 
 # Save raster maps as asc (easiest to change into format needed for pascal program)
-writeRaster(reproj_peninsula1, "data/pre_processed_data/HabitatMap_500_Peninsula_Revilla_2015_1.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_donana1, "data/pre_processed_data/HabitatMap_500_Donana_Revilla_2015_1.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_peninsula1, "data/pre_processed_data/Lynx_HabitatMap_500_Peninsula_Revilla_2015_1.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_donana1, "data/pre_processed_data/Lynx_HabitatMap_500_Donana_Revilla_2015_1.asc", datatype = "INT2S", overwrite = TRUE)
 
-writeRaster(reproj_peninsula2, "data/pre_processed_data/HabitatMap_500_Peninsula_Revilla_2015_2.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_donana2, "data/pre_processed_data/HabitatMap_500_Donana_Revilla_2015_2.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_peninsula2, "data/pre_processed_data/Lynx_HabitatMap_500_Peninsula_Revilla_2015_2.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_donana2, "data/pre_processed_data/Lynx_HabitatMap_500_Donana_Revilla_2015_2.asc", datatype = "INT2S", overwrite = TRUE)
 
 
 
@@ -100,8 +100,8 @@ reproj_donanaF <- resample(reclas_donanaF, donana_template, method = "mode")
 
 
 # Save raster maps as asc (easiest to change into format needed for pascal program)
-writeRaster(reproj_peninsulaF, "data/pre_processed_data/BreedingHabitat_500_Peninsula_Fordham_2013.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_donanaF, "data/pre_processed_data/BreedingHabitat_500_Donana_Fordham_2013.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_peninsulaF, "data/pre_processed_data/Lynx_BreedingHabitat_500_Peninsula_Fordham_2013.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_donanaF, "data/pre_processed_data/Lynx_BreedingHabitat_500_Donana_Fordham_2013.asc", datatype = "INT2S", overwrite = TRUE)
 
 
 # --------------------------------------
@@ -141,8 +141,8 @@ reproj_iucnDonana <- resample(iucn_donana, donana_template, method = "mode")
 
 
 # Save raster maps as asc (easiest to change into format needed for pascal program)
-writeRaster(reproj_iucnPeninsula, "data/pre_processed_data/populations_500_Peninsula_IUCN.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_iucnDonana, "data/pre_processed_data/populations_500_Donana_IUCN.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_iucnPeninsula, "data/pre_processed_data/Lynx_populations_500_Peninsula_IUCN.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_iucnDonana, "data/pre_processed_data/Lynx_populations_500_Donana_IUCN.asc", datatype = "INT2S", overwrite = TRUE)
 
 
 # Increase the iucn population area's a bit -----------------------------------------------------------------------------------------
@@ -194,8 +194,8 @@ reproj_donana_lynx75 <- resample(iucn_donana75, donana_template, method = "mode"
 
 
 # Save raster maps as asc (easiest to change into format needed for pascal program)
-writeRaster(reproj_peninsula_lynx75, "data/pre_processed_data/populations_500_Peninsula_IUCN75.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_donana_lynx75, "data/pre_processed_data/populations_500_Donana_IUCN75.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_peninsula_lynx75, "data/pre_processed_data/Lynx_populations_500_Peninsula_IUCN75.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_donana_lynx75, "data/pre_processed_data/Lynx_populations_500_Donana_IUCN75.asc", datatype = "INT2S", overwrite = TRUE)
 
 
 # ----------------------------------------------------------------------------
@@ -216,6 +216,8 @@ writeRaster(reproj_donana_lynx75, "data/pre_processed_data/populations_500_Donan
 
 # colFromX(reproj_iucnDonana, x = c(2847165))
 # rowFromY(reproj_iucnDonana, y = c(1713702))
+
+
 
 
 

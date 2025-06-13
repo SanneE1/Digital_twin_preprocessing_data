@@ -66,8 +66,8 @@ reproj_peninsula <- resample(reclas_peninsula, peninsula_template, method = "mod
 reproj_donana <- resample(reclas_donana, donana_template, method = "mode")
 
 # Set the output data type to Int16
-output_files <- list( peninsula = file.path(output_folder, "HabitatMap_500_Peninsula_Fordham_2013.asc"),
-                      donana = file.path(output_folder, "HabitatMap_500_Donana_Fordham_2013.asc"))
+output_files <- list( peninsula = file.path(output_folder, "Rabbit_HabitatMap_500_Peninsula_Fordham_2013.asc"),
+                      donana = file.path(output_folder, "Rabbit_HabitatMap_500_Donana_Fordham_2013.asc"))
                   
 print("save files")
 
