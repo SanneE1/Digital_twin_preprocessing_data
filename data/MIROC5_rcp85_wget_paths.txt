@@ -1,0 +1,6 @@
+https://os.zhdk.cloud.switch.ch/chelsav1/chelsa_cmip5_ts/CHELSAcmip5ts_pr_MIROC5_rcp85_2006-2029_V1.1.nc 
+https://os.zhdk.cloud.switch.ch/chelsav1/chelsa_cmip5_ts/CHELSAcmip5ts_pr_MIROC5_rcp85_2030-2049_V1.1.nc 
+https://os.zhdk.cloud.switch.ch/chelsav1/chelsa_cmip5_ts/CHELSAcmip5ts_tasmax_MIROC5_rcp85_2006-2029_V1.1.nc 
+https://os.zhdk.cloud.switch.ch/chelsav1/chelsa_cmip5_ts/CHELSAcmip5ts_tasmax_MIROC5_rcp85_2030-2049_V1.1.nc 
+https://os.zhdk.cloud.switch.ch/chelsav1/chelsa_cmip5_ts/CHELSAcmip5ts_tasmin_MIROC5_rcp85_2006-2029_V1.1.nc 
+https://os.zhdk.cloud.switch.ch/chelsav1/chelsa_cmip5_ts/CHELSAcmip5ts_tasmin_MIROC5_rcp85_2030-2049_V1.1.nc 

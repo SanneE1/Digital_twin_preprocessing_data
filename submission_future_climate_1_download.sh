@@ -6,5 +6,7 @@
 #SBATCH --output=job_reports/down_output_%j.log        # Standard output and error log (%j expands to jobID)
 #SBATCH --error=job_reports/down_error_%j.log
 
+WGET_FILE=$1
+
 # Run wget download line
-wget --no-host-directories --force-directories --input-file=envidatS3paths.txt
+wget --no-host-directories --force-directories --input-file=$WGET_FILE
