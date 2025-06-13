@@ -2,7 +2,7 @@
 
 Repository with scripts to process data needed to run the Lynx-Rabbit IBMs
 
-## Currently 3 "worklfows"
+## Currently 3 "workflows"
 
 **pre_processing_input_files.py**: wrapper for the scripts to format the input habitat maps and download/format historical climate.  
 **submission_future_climate_\* files**: ordered submission files to download and format future climate from CHELSA, using the wget files in the data folder.  
