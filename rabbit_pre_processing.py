@@ -24,7 +24,3 @@ subprocess.run(["python", "python/download_historical_climate.py"])
 # Formatting downloaded climate
 robjects.r.source('R/Formatting_climate_data.R')
 
-# Format census data from Zulima for calibration
-robjects.r.source('R/Transform_Zulima_data_for_calibration_mcmc.R')
-
-
