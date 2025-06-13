@@ -2,11 +2,12 @@
 
 Repository with scripts to process data needed to run the Lynx-Rabbit IBMs
 
-## Currently 3 "worklfows"
+## Currently 4 "worklfows"
 
 **lynx_pre_processing.py**: wrapper for the scripts needed to format input habitat maps.  
 **rabbit_pre_processing.py**: wrapper for the scripts to format the input habitat maps and download/format historical climate.  
 **submission_future_climate_\* files**: ordered submission files to download and formate future climate from CHELSA, using the wget files in the data folder.  
+**Create_input_parameter_files.py**: A very simple script, that currently write the two text files needed as input for the model. With development of the digital twin, this can be updated to include parameters estimated from model callibration and user input
 
 ## Data needed not currently in the wrapper/processes
 CORINE Land Cover:  
