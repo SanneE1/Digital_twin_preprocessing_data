@@ -1,6 +1,13 @@
 # Digital_twin_preprocessing_data
 
-Repository with scripts to process data needed to run the Lynx-Rabbit IBMs
+Repository with scripts to process data needed to run the Lynx-Rabbit IBMs.  
+You'll need to add the following folders manually:  
+
+  
+data/  
+├── original_data/  
+└── pre_processed_data/  
+input_data/
 
 ## Currently 3 "workflows"
 
