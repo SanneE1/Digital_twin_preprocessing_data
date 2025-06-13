@@ -151,28 +151,38 @@ if __name__ == "__main__":
     input_coord = "data/pre_processed_data/coordinates_donana_500_EPSG3035.txt"
     output_coord = "data/pre_processed_data/coordinates_donana_500_EPSG4326.txt"
     base_download_location = "data/pre_processed_data/Climate_Donana_500"    
-    wget_file = "data/original_data/CHELSAwget_files.txt"
+    wget_file = "data/historical_climate_wget_files.txt"
     
-    # ========================================================================
-    # Parameters set for Peninsula 
-    # ========================================================================
-    
-    # input_coord = "data/pre_processed_data/coordinates_peninsula_500_EPSG3035.txt"
-    # output_coord = "data/pre_processed_data/coordinates_peninsula_500_EPSG4326.txt"
-    # base_download_location = "data/pre_processed_data/Climate_Peninsula_500"
-    
-    # wget_file = "data/original_data/CHELSAwget_files.txt"
-    
-    # ========================================================================
-    # EXECUTION - No need to modify below this line
-    # ========================================================================
-    
+    # EXECUTION -----------------------------------------------------------------------------
     # Ensure the download location exists
     os.makedirs(base_download_location, exist_ok=True)
     
     # Download current climate data if requested
    print(f"Downloading current climate data from {wget_file}")
-   current_download_location = os.path.join(base_download_location, "current_climate")
+   current_download_location = os.path.join(base_download_location, "historical_climate")
+   download_point_climate_value(
+            input_coord, 
+            output_coord, 
+            wget_file, 
+            current_download_location
+   )
+    # ========================================================================
+    # Parameters set for Peninsula 
+    # ========================================================================
+    
+    input_coord = "data/pre_processed_data/coordinates_peninsula_500_EPSG3035.txt"
+    output_coord = "data/pre_processed_data/coordinates_peninsula_500_EPSG4326.txt"
+    base_download_location = "data/pre_processed_data/Climate_Peninsula_500"
+    
+    wget_file = "data/historical_climate_wget_files.txt"
+    
+    # EXECUTION -----------------------------------------------------------------------------
+    # Ensure the download location exists
+    os.makedirs(base_download_location, exist_ok=True)
+    
+    # Download current climate data if requested
+   print(f"Downloading current climate data from {wget_file}")
+   current_download_location = os.path.join(base_download_location, "historical_climate")
    download_point_climate_value(
             input_coord, 
             output_coord, 
