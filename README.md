@@ -9,7 +9,8 @@ data/
 └── pre_processed_data/  
 input_data/
 
-## Currently 3 "workflows"
+## 3 "workflows"  
+The following workflows will create the required files needed for the Lynx-Rabbit IBMs in the `input_data/` folder.  
 
 **pre_processing_input_files.py**: wrapper for the scripts to format the input habitat maps and download/format historical climate.  
 **submission_future_climate_\* files**: ordered submission files to download and format future climate from CHELSA, using the wget files in the data folder.  
