@@ -10,6 +10,7 @@
 DOWN_DIR=$1
 YEAR_MIN=$2
 YEAR_MAX=$3
+SPAT_OPTION=$4
 
 # Run wget download line
-Rscript R/Formatting_climate_data.R $SLURM_ARRAY_TASK_ID 1000 $DOWN_DIR $YEAR_MIN $YEAR_MAX
+Rscript R/Formatting_climate_data.R $SLURM_ARRAY_TASK_ID 1000 $DOWN_DIR $YEAR_MIN $YEAR_MAX $SPAT_OPTION

@@ -8,6 +8,7 @@ library(tidyr)
 library(stringr)
 library(lubridate)
 
+args = commandArgs(trailingOnly = T)
 
 # Function to process a single file
 format_future_ts_climate <- function(file) {
@@ -51,8 +52,8 @@ df <- data.frame()
   
 }
 
-files <- list.files(pattern = ".nc", recursive = T, full.names = T)
-gps <- read.table("coordinates_peninsula_500_EPSG4326.txt")
+files <- list.files(pattern = "CHELSAcmip5ts", recursive = T, full.names = T)
+gps <- read.table(args[1])
 
 lapply(files, format_future_ts_climate) 
     

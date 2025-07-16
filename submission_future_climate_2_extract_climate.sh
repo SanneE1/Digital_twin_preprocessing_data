@@ -6,5 +6,7 @@
 #SBATCH --output=job_reports/extract_output_%j.log        # Standard output and error log (%j expands to jobID)
 #SBATCH --error=job_reports/extract_error_%j.log
 
+COOR_FILE=$1
+
 # Run wget download line
-Rscript R/extract_downloaded_data.R
+Rscript R/extract_downloaded_data.R $COOR_FILE

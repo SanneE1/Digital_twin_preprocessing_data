@@ -133,8 +133,8 @@ calculate_BM_cDM <- function(download_location, year_min, year_max,
     
    }
   
-  breeding_file <- file.path("formatted_data", paste("breeding_months", download_location, year_min, year_max, "chunk", min(row_indices), max(row_indices), '.txt', sep = "_"))
-  dry_months_file <- file.path("formatted_data", paste("consecutive_dry_months", download_location, year_min, year_max, "chunk", min(row_indices), max(row_indices), '.txt', sep = "_"))
+  breeding_file <- file.path(download_location, paste("breeding_months", download_location, year_min, year_max, "chunk", min(row_indices), max(row_indices), '.txt', sep = "_"))
+  dry_months_file <- file.path(download_location, paste("consecutive_dry_months", download_location, year_min, year_max, "chunk", min(row_indices), max(row_indices), '.txt', sep = "_"))
 
  
   write.table(breed_df, breeding_file, quote = F, row.names = F)
@@ -153,9 +153,19 @@ download_location <- args[3]
 year_min <- as.integer(args[4])
 year_max <- as.integer(args[5])
 
+if (args[6] == "donana") {
+  coord_file = "data/coordinates_peninsula_500_EPSG4326.txt" 
+  row_col_file = "data/coordinates_peninsula_500_EPSG3035.txt"
+} else if (args[6] == "peninsula") {
+  coord_file = "data/coordinates_donana_500_EPSG4326.txt" 
+  row_col_file = "data/coordinates_donana_500_EPSG3035.txt"
+} else {
+  stop("files for coordinates only have two options: 'donana' or 'peninsula'")
+}
+
 # Read the coordinate file to get total number of rows
-coord_file <- "formatted_data/coordinates_peninsula_500_EPSG4326.txt"
-total_rows <- nrow(read.table(coord_file))
+row_file <- list.files(download_location, full.names = T)[1]
+total_rows <- nrow(read.table(row_file))
 
 # Calculate chunk size and start/end rows
 chunk_size <- ceiling(total_rows / total_arrays)
@@ -165,11 +175,11 @@ end_row <- min(array_id * chunk_size, total_rows)
 # Extract row index ranges
 row_indices <- c(start_row:end_row)
 
-calculate_BM_cDM(download_location = "CMCC-CM_rcp45", 
+calculate_BM_cDM(download_location = download_location, 
                  year_min = 2022,
                  year_max = 2049,
-                 coord_file = "formatted_data/coordinates_peninsula_500_EPSG4326.txt", 
-                 row_col_file = "formatted_data/coordinates_peninsula_500_EPSG3035.txt",
+                 coord_file = coord_file, 
+                 row_col_file = row_col_file,
                  row_indices = row_indices)
 
 

@@ -1,6 +1,10 @@
 data/original_data/
 data/pre_processed_data/
 input_data/
+job_reports/
+chelsav1/
+CMCC-CM_rcp45/
+
 
 # History files
 .Rhistory
