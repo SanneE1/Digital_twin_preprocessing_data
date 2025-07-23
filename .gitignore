@@ -1,10 +1,12 @@
 data/original_data/
 data/pre_processed_data/
+data/coordinates_*.txt
 input_data/
 job_reports/
 chelsav1/
-CMCC-CM_rcp45/
-
+donana_*/
+peninsula_*/
+final_files/
 
 # History files
 .Rhistory
