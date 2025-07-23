@@ -35,7 +35,7 @@ df <- data.frame()
   df <- bind_rows(df, df_chunk)
   }
   
-  output_dir <- paste(opt[5], opt[6], sep = "_")
+  output_dir <- paste(spat_scale, opt[5], opt[6], sep = "_")
   
   if(!dir.exists(output_dir)){
     dir.create(output_dir)
@@ -43,8 +43,6 @@ df <- data.frame()
   
   for(i in c(2:ncol(df))) {
   year <- as.integer(substr(colnames(df)[i], 2, 5))
-    # Skip if the year is less than 2021
-  if (year < 2021) next
   fileName <- paste(opt[4], gsub("\\.", "_", colnames(df)[i]), sep = "_")
   write.table(df[,i], file = file.path(output_dir, paste0(fileName, ".txt")),
    row.names = F, col.names = F)
@@ -54,6 +52,7 @@ df <- data.frame()
 
 files <- list.files(pattern = "CHELSAcmip5ts", recursive = T, full.names = T)
 gps <- read.table(args[1])
+spat_scale <- args[2]
 
 lapply(files, format_future_ts_climate) 
     

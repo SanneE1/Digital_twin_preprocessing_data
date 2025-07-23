@@ -68,13 +68,13 @@ calculate_BM_cDM <- function(download_location, year_min, year_max,
                        read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("tasmin_X", year_min - 1, "_11")))[row_indices,1],
                        read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("tasmax_X", year_min - 1, "_11")))[row_indices,1]
                        ))) - 273.15
-  pr_11 <-  (read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("pr_X", year_min - 1, "_11")))[,1] * 86400 * 30.4)
+  pr_11 <-  (read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("pr_X", year_min - 1, "_11")))[row_indices,1] * 86400 * 30.4)
   
   tas_12 <- (rowMeans(cbind(
-    read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("tasmin_X", year_min - 1, "_12")))[,1],
-    read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("tasmax_X", year_min - 1, "_12")))[,1]
+    read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("tasmin_X", year_min - 1, "_12")))[row_indices,1],
+    read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("tasmax_X", year_min - 1, "_12")))[row_indices,1]
   ))) - 273.15
-  pr_12 <-  (read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("pr_X", year_min - 1, "_12")))[,1] * 86400 * 30.4)
+  pr_12 <-  (read.table(list.files(download_location, full.names = T, recursive = T, pattern = paste0("pr_X", year_min - 1, "_12")))[row_indices,1] * 86400 * 30.4)
   
   # Here calculate if a month produces food (T) or was dry (F)
   wet_2 <- ifelse(pr_11 < (2*tas_11), F, T)
@@ -149,14 +149,14 @@ args <- commandArgs(trailingOnly = TRUE)
 array_id <- as.integer(args[1])
 total_arrays <- as.integer(args[2])
 
-download_location <- args[3]
+download_location <- sub("/$", "", args[3])
 year_min <- as.integer(args[4])
 year_max <- as.integer(args[5])
 
-if (args[6] == "donana") {
+if (args[6] == "peninsula") {
   coord_file = "data/coordinates_peninsula_500_EPSG4326.txt" 
   row_col_file = "data/coordinates_peninsula_500_EPSG3035.txt"
-} else if (args[6] == "peninsula") {
+} else if (args[6] == "donana") {
   coord_file = "data/coordinates_donana_500_EPSG4326.txt" 
   row_col_file = "data/coordinates_donana_500_EPSG3035.txt"
 } else {
@@ -164,8 +164,7 @@ if (args[6] == "donana") {
 }
 
 # Read the coordinate file to get total number of rows
-row_file <- list.files(download_location, full.names = T)[1]
-total_rows <- nrow(read.table(row_file))
+total_rows <- nrow(read.table(coord_file))
 
 # Calculate chunk size and start/end rows
 chunk_size <- ceiling(total_rows / total_arrays)
@@ -176,8 +175,8 @@ end_row <- min(array_id * chunk_size, total_rows)
 row_indices <- c(start_row:end_row)
 
 calculate_BM_cDM(download_location = download_location, 
-                 year_min = 2022,
-                 year_max = 2049,
+                 year_min = year_min,
+                 year_max = year_max,
                  coord_file = coord_file, 
                  row_col_file = row_col_file,
                  row_indices = row_indices)

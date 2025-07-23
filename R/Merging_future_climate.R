@@ -1,6 +1,8 @@
 library(data.table)  
 
-download_location <- args[1]
+args = commandArgs(trailingOnly = T)
+
+download_location <- sub("/$", "", args[1]) 
 year_min <- as.integer(args[2])
 year_max <- as.integer(args[3])
 
@@ -79,15 +81,15 @@ cat("Starting merge operation...\n")
 # Merge breeding months files
 cat("\n=== Processing breeding months files ===\n")
 merge_chunk_files(
-  base_filename = file.path("formatted_data", paste("breeding_months", download_location, year_min, year_max)),
-  output_filename = file.path("formatted_data", paste0(paste("breeding_months", download_location, year_min, year_max), '.txt'))
+  base_filename = file.path(download_location, paste("breeding_months", download_location, year_min, year_max, sep = "_")),
+  output_filename = file.path("final_files", paste0(paste("breeding_months", download_location, year_min, year_max, sep = "_"), '.txt'))
 )
 
 # Merge consecutive dry months files
 cat("\n=== Processing consecutive dry months files ===\n")
 merge_chunk_files(
-  base_filename = file.path("formatted_data", paste("consecutive_dry_months", download_location, year_min, year_max)),
-  output_filename = file.path("formatted_data", paste0(paste("consecutive_dry_months", download_location, year_min, year_max), '.txt'))
+  base_filename = file.path(download_location, paste("consecutive_dry_months", download_location, year_min, year_max, sep = "_")),
+  output_filename = file.path("final_files", paste0(paste("consecutive_dry_months", download_location, year_min, year_max, sep = "_"), '.txt'))
 )
 
 cat("All merges completed successfully!\n")
