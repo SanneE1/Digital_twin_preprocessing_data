@@ -13,4 +13,4 @@ YEAR_MAX=$3
 SPAT_OPTION=$4
 
 # Run wget download line
-Rscript R/Formatting_climate_data.R $SLURM_ARRAY_TASK_ID 1000 $DOWN_DIR $YEAR_MIN $YEAR_MAX $SPAT_OPTION
+Rscript R/Format_climate_data_for_rabbit_slurm_batch.R $SLURM_ARRAY_TASK_ID 1000 $DOWN_DIR $YEAR_MIN $YEAR_MAX $SPAT_OPTION

@@ -2,23 +2,19 @@ import sys
 import os
 import glob
 
-def transform_asc_file(input_path, output_path=None):
+def transform_asc_file(input_path, output_path):
     """
     Transform an ASC file by replacing the standard 6-line header with a simplified
     single-line 'ncols nrows' header.
     
     Args:
         input_path (str): Path to the input ASC file
-        output_path (str, optional): Path for the output file. If None, will create a file
+        output_path (str): Path for the output file. If None, will create a file
                                     with '_transformed' suffix
     
     Returns:
         str: Path to the output file
     """
-    # Create output path if not provided
-    if output_path is None:
-        base, ext = os.path.splitext(input_path)
-        output_path = f"{base}_transformed{ext}"
     
     ncols = None
     nrows = None
@@ -57,24 +53,28 @@ def transform_asc_file(input_path, output_path=None):
                 pass
         return None
 
-def process_folder(folder_path):
+def process_folder(asc_folder, output_folder):
     """
     Process all .asc files in the specified folder and create corresponding .txt files
     with "Lynx_" prefix.
     
     Args:
-        folder_path (str): Path to the folder containing .asc files
+        asc_folder (str): Path to the folder containing .asc files
+        output_folder (str): Path to where the  .txt files need to be printed
     """
-    # Make sure the folder path exists
-    if not os.path.isdir(folder_path):
-        print(f"Error: Folder '{folder_path}' does not exist")
+    # Make sure both folder path exists
+    if not os.path.isdir(asc_folder):
+        print(f"Error: Folder '{asc_folder}' does not exist")
         return
     
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder, exist_ok=True)
+        
     # Get all .asc files in the folder
-    asc_files = glob.glob(os.path.join(folder_path, "*.asc"))
+    asc_files = glob.glob(os.path.join(asc_folder, "*.asc"))
     
     if not asc_files:
-        print(f"No .asc files found in '{folder_path}'")
+        print(f"No .asc files found in '{asc_folder}'")
         return
     
     print(f"Found {len(asc_files)} .asc files to process")
@@ -88,17 +88,8 @@ def process_folder(folder_path):
         # Create output path with species prefix and .txt extension
         base_name, _ = os.path.splitext(filename)
         output_filename = f"{base_name}.txt"
-        output_file = os.path.join("input_data", "maps", output_filename)
+        output_file = os.path.join(output_folder, output_filename)
         
         # Transform the file
         transform_asc_file(asc_file, output_file)
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        # Use the folder path provided as a command-line argument
-        folder_path = sys.argv[1]
-    else:
-        # Default folder path if none provided
-        folder_path = "data/pre_processed_data"
-    
-    process_folder(folder_path)

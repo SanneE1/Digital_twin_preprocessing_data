@@ -1,5 +1,7 @@
 data/original_data/
 data/pre_processed_data/
+data/lynx_callibration_data/
+
 data/coordinates_*.txt
 input_data/
 job_reports/

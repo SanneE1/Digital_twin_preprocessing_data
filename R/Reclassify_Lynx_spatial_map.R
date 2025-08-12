@@ -2,7 +2,7 @@
 library(terra)
 
 # CORINE
-corine_raster_path <- "data/original_data/U2018_CLC2018_V2020_20u1.tif"  # Replace with the path to your CORINE raster
+# corine_raster_path <- "data/original_data/U2018_CLC2018_V2020_20u1.tif"  # Replace with the path to your CORINE raster
 
 # Load the CORINE raster
 corine_raster <- rast(corine_raster_path)
@@ -68,48 +68,48 @@ reproj_donana2 <- resample(reclas_donana2, donana_template, method = "mode")
 
 
 # Save raster maps as asc (easiest to change into format needed for pascal program)
-writeRaster(reproj_peninsula1, "data/pre_processed_data/Lynx_HabitatMap_500_Peninsula_Revilla_2015_1.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_donana1, "data/pre_processed_data/Lynx_HabitatMap_500_Donana_Revilla_2015_1.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_peninsula1, file.path(output_dir, "Lynx_HabitatMap_500_Peninsula_Revilla_2015_1.asc"), datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_donana1, file.path(output_dir, "Lynx_HabitatMap_500_Donana_Revilla_2015_1.asc"), datatype = "INT2S", overwrite = TRUE)
 
-writeRaster(reproj_peninsula2, "data/pre_processed_data/Lynx_HabitatMap_500_Peninsula_Revilla_2015_2.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_donana2, "data/pre_processed_data/Lynx_HabitatMap_500_Donana_Revilla_2015_2.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_peninsula2, file.path(output_dir, "Lynx_HabitatMap_500_Peninsula_Revilla_2015_2.asc"), datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_donana2, file.path(output_dir, "Lynx_HabitatMap_500_Donana_Revilla_2015_2.asc"), datatype = "INT2S", overwrite = TRUE)
 
 
 
 # --------------------------------------
-# BREEDING HABITAT
+# BREEDING HABITAT   -- Carryover from the stand-alone Lynx model. Keeping it here, because I would like to have a comparison at some point between using rabbits or this!
 # --------------------------------------
-
-
-# Reclassification table --- Based on Revilla 2015 (both options)
-reclass_Ford <- as.matrix(data.frame(
-  old = c(1:44, 48),
-  new = c(rep(0,27), 1, 1, rep(0,16))
-))
-
-
-# Perform the reclassification
-# Convert the reclass_table into a matrix for terra::classify
-reclas_peninsulaF <- classify(peninsula, reclass_Ford)
-reclas_donanaF <- classify(Donana, reclass_Ford)
-
-
-# Resize to 500x500m raster size
-reproj_peninsulaF <- resample(reclas_peninsulaF, peninsula_template, method = "mode")
-reproj_donanaF <- resample(reclas_donanaF, donana_template, method = "mode")
-
-
-# Save raster maps as asc (easiest to change into format needed for pascal program)
-writeRaster(reproj_peninsulaF, "data/pre_processed_data/Lynx_BreedingHabitat_500_Peninsula_Fordham_2013.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_donanaF, "data/pre_processed_data/Lynx_BreedingHabitat_500_Donana_Fordham_2013.asc", datatype = "INT2S", overwrite = TRUE)
-
-
+# 
+# 
+# # Reclassification table --- Based on Revilla 2015 (both options)
+# reclass_Ford <- as.matrix(data.frame(
+#   old = c(1:44, 48),
+#   new = c(rep(0,27), 1, 1, rep(0,16))
+# ))
+# 
+# 
+# # Perform the reclassification
+# # Convert the reclass_table into a matrix for terra::classify
+# reclas_peninsulaF <- classify(peninsula, reclass_Ford)
+# reclas_donanaF <- classify(Donana, reclass_Ford)
+# 
+# 
+# # Resize to 500x500m raster size
+# reproj_peninsulaF <- resample(reclas_peninsulaF, peninsula_template, method = "mode")
+# reproj_donanaF <- resample(reclas_donanaF, donana_template, method = "mode")
+# 
+# 
+# # Save raster maps as asc (easiest to change into format needed for pascal program)
+# writeRaster(reproj_peninsulaF, file.path(output_dir, "Lynx_BreedingHabitat_500_Peninsula_Fordham_2013.asc"), datatype = "INT2S", overwrite = TRUE)
+# writeRaster(reproj_donanaF, file.path(output_dir, "Lynx_BreedingHabitat_500_Donana_Fordham_2013.asc"), datatype = "INT2S", overwrite = TRUE)
+# 
+#
 # --------------------------------------
 # POPULATION MAPS
 # --------------------------------------
 
 # Extract Iberian lynx populations for IUCN file
-full_map <- vect("data/original_data/IUCN/MAMMALS_TERRESTRIAL_ONLY.shp")
+full_map <- vect(iucn_terrestrial_mammals)
 iucn_lynx <- full_map[full_map$sci_name=='Lynx pardinus',]
 iucn_lynx <- project(iucn_lynx, crs(peninsula))#, method="pipeline")
 iucn_lynx <- iucn_lynx[order(iucn_lynx$SHAPE_Area),]
@@ -122,8 +122,6 @@ iucn_lynx <- iucn_lynx[order(iucn_lynx$SHAPE_Area),]
 # 5 Matachel 0.0315
 
 iucn_lynx$subpop_int <- c(4, 3, 5, 4, 3, 2, 1, 1)
-
-terra::writeVector(iucn_lynx, "data/pre_processed_data/IUCN_lynx_pardinus.shp", overwrite = T)
 
 # Rasterize populations
 iucn_peninsula <- terra::crop(iucn_lynx, ext(peninsula))
@@ -141,8 +139,8 @@ reproj_iucnDonana <- resample(iucn_donana, donana_template, method = "mode")
 
 
 # Save raster maps as asc (easiest to change into format needed for pascal program)
-writeRaster(reproj_iucnPeninsula, "data/pre_processed_data/Lynx_populations_500_Peninsula_IUCN.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_iucnDonana, "data/pre_processed_data/Lynx_populations_500_Donana_IUCN.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_iucnPeninsula, file.path(output_dir, "Lynx_populations_500_Peninsula_IUCN.asc"), datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_iucnDonana, file.path(output_dir, "Lynx_populations_500_Donana_IUCN.asc"), datatype = "INT2S", overwrite = TRUE)
 
 
 # Increase the iucn population area's a bit -----------------------------------------------------------------------------------------
@@ -194,8 +192,8 @@ reproj_donana_lynx75 <- resample(iucn_donana75, donana_template, method = "mode"
 
 
 # Save raster maps as asc (easiest to change into format needed for pascal program)
-writeRaster(reproj_peninsula_lynx75, "data/pre_processed_data/Lynx_populations_500_Peninsula_IUCN75.asc", datatype = "INT2S", overwrite = TRUE)
-writeRaster(reproj_donana_lynx75, "data/pre_processed_data/Lynx_populations_500_Donana_IUCN75.asc", datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_peninsula_lynx75, file.path(output_dir, "Lynx_populations_500_Peninsula_IUCN75.asc"), datatype = "INT2S", overwrite = TRUE)
+writeRaster(reproj_donana_lynx75, file.path(output_dir, "Lynx_populations_500_Donana_IUCN75.asc"), datatype = "INT2S", overwrite = TRUE)
 
 
 # ----------------------------------------------------------------------------
