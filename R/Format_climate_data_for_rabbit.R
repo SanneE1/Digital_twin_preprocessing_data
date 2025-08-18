@@ -56,7 +56,7 @@ calculate_BM_cDM <- function(download_location,
   mE <- cumsum(mL)
   
   dL <- lapply(as.list(c(1:12)), function(x) {
-    read.table(coord_file)[row_indices, c("V1", "V2")] %>% 
+    read.table(coord_file)[,c("V1", "V2")] %>% 
       as.data.frame() %>%
       rowwise() %>%
       mutate(dayL = mean(daylength(V2, c((mE[x] - mL[x]):mE[x])) * 60),
@@ -80,32 +80,32 @@ calculate_BM_cDM <- function(download_location,
   # Load initial data for wet/dry calculations (November and December of previous year)
   if (temperature_type == "mean") {
     tas_11 <- (read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                                     pattern = paste0("tas_11_", year_min - 1)))[row_indices, 1] / 10) - 273.15
+                                     pattern = paste0("tas_11_", year_min - 1)))[, 1] / 10) - 273.15
     pr_11 <- read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                                   pattern = paste0("pr_11_", year_min - 1)))[row_indices, 1] / 100
+                                   pattern = paste0("pr_11_", year_min - 1)))[, 1] / 100
     
     tas_12 <- (read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                                     pattern = paste0("tas_12_", year_min - 1)))[row_indices, 1] / 10) - 273.15
+                                     pattern = paste0("tas_12_", year_min - 1)))[, 1] / 10) - 273.15
     pr_12 <- read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                                   pattern = paste0("pr_12_", year_min - 1)))[row_indices, 1] / 100
+                                   pattern = paste0("pr_12_", year_min - 1)))[, 1] / 100
   } else {
     tas_11 <- (rowMeans(cbind(
       read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                            pattern = paste0("tasmin_X", year_min - 1, "_11")))[row_indices, 1],
+                            pattern = paste0("tasmin_X", year_min - 1, "_11")))[, 1],
       read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                            pattern = paste0("tasmax_X", year_min - 1, "_11")))[row_indices, 1]
+                            pattern = paste0("tasmax_X", year_min - 1, "_11")))[, 1]
     ))) - 273.15
     pr_11 <- (read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                                    pattern = paste0("pr_X", year_min - 1, "_11")))[row_indices, 1] * 86400 * 30.4)
+                                    pattern = paste0("pr_X", year_min - 1, "_11")))[, 1] * 86400 * 30.4)
     
     tas_12 <- (rowMeans(cbind(
       read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                            pattern = paste0("tasmin_X", year_min - 1, "_12")))[row_indices, 1],
+                            pattern = paste0("tasmin_X", year_min - 1, "_12")))[, 1],
       read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                            pattern = paste0("tasmax_X", year_min - 1, "_12")))[row_indices, 1]
+                            pattern = paste0("tasmax_X", year_min - 1, "_12")))[, 1]
     ))) - 273.15
     pr_12 <- (read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
-                                    pattern = paste0("pr_X", year_min - 1, "_12")))[row_indices, 1] * 86400 * 30.4)
+                                    pattern = paste0("pr_X", year_min - 1, "_12")))[, 1] * 86400 * 30.4)
   }
   
   # Calculate initial wet/dry conditions
@@ -113,8 +113,8 @@ calculate_BM_cDM <- function(download_location,
   wet_1 <- ifelse(pr_12 < (2 * tas_12), FALSE, TRUE)
   
   # Initialize result data frames
-  breed_df_empty <- read.table(coord_file)[row_indices, c("V3", "V4")]
-  dry_df_empty <- read.table(coord_file)[row_indices, c("V3", "V4")]
+  breed_df_empty <- read.table(coord_file)[, c("V3", "V4")]
+  dry_df_empty <- read.table(coord_file)[, c("V3", "V4")]
   
   colnames(breed_df_empty) <- c("col", "row")
   colnames(dry_df_empty) <- c("col", "row")
@@ -143,8 +143,8 @@ calculate_BM_cDM <- function(download_location,
           stop("Multiple tas or pr files found for specific month/year")
         }
         
-        tas <- (read.table(tas_file)[row_indices, 1] / 10) - 273.15
-        pr <- read.table(pr_file)[row_indices, 1] / 100
+        tas <- (read.table(tas_file)[, 1] / 10) - 273.15
+        pr <- read.table(pr_file)[, 1] / 100
         
       } else {
         tasmin_file <- list.files(download_location, full.names = TRUE, recursive = TRUE, 
@@ -161,9 +161,9 @@ calculate_BM_cDM <- function(download_location,
           stop("Multiple or missing temperature/precipitation files found for specific month/year")
         }
         
-        tas <- (rowMeans(cbind(read.table(tasmin_file)[row_indices, 1], 
-                               read.table(tasmax_file)[row_indices, 1]))) - 273.15
-        pr <- (read.table(pr_file)[row_indices, 1] * 86400 * 30.4)
+        tas <- (rowMeans(cbind(read.table(tasmin_file)[, 1], 
+                               read.table(tasmax_file)[, 1]))) - 273.15
+        pr <- (read.table(pr_file)[, 1] * 86400 * 30.4)
       }
       
       # Get day length and delta for current month
