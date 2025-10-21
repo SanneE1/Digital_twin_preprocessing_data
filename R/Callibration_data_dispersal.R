@@ -2,9 +2,12 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(terra)
+library(sf)
+
+if(!(dir.exists("observation_data/lynx_dispersal/"))) {dir.create("observation_data/lynx_dispersal/", recursive = T)}
 
 
-df <- read.csv("data/lynx_callibration_data/Movement publications/GPS_data_Iberian_lynx_PVA.csv", row.names = NULL) %>%
+df <- read.csv("data/original_data/GPS_dispersal_data_Iberian_lynx_Cisneros-Araujo.csv", row.names = NULL) %>%
   tibble::column_to_rownames("X") %>%
   mutate(t = as.POSIXct(t, format = "%d/%m/%Y %H:%M"), 
          year = year(t),
@@ -32,7 +35,7 @@ df_movement_rates <- df %>%
   ungroup()
 
 ggplot() +
-  geom_smooth(data = df_movement, aes(x = hour, y = movement_rate))
+  geom_smooth(data = df_movement_rates, aes(x = hour, y = movement_rate))
 
 # Start day at 16:00 -------------------------------------------------------------------------------------------
 
@@ -75,5 +78,7 @@ points(zero_coords[,1], zero_coords[,2],
 df$habitat0 <- a$U2018_CLC2018_V2020_20u1
 df$habitat1 <- extract(habitat_rast, as.matrix(coor_next[, c("X", "Y")]))$U2018_CLC2018_V2020_20u1
 
-write.table(df[which(a != 0),c("col0", "row0")], file = "input_data/callibration_dispersal_starting_locations.txt", row.names = F)
-write.csv(df, file = "data/pre_processed_data/callibration_dispersal_full_table.csv", row.names = F)
+write.table(df[which(a != 0),c("col0", "row0")], file = "observation_data/lynx_dispersal/callibration_dispersal_starting_locations.txt", row.names = F)
+write.csv(df[which(a != 0),c("col0", "row0", "col1", "row1")], file = "observation_data/lynx_dispersal/callibration_dispersal_observed.csv", row.names = F)
+
+write.csv(df, file = "observation_data/lynx_dispersal/callibration_dispersal_full_table.csv", row.names = F)
