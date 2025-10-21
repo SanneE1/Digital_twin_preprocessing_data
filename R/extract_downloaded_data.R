@@ -16,12 +16,20 @@ format_future_ts_climate <- function(file) {
   
   opt <- stringr::str_split(file, "_")[[1]]
   nc <- raster::brick(file)
-
-df <- data.frame()
+  
+  output_dir <- paste(spat_scale, opt[5], opt[6], sep = "_")
+  
+  if(!dir.exists(output_dir)){
+    dir.create(output_dir)
+  }
+  
+  df <- data.frame()
   
   total_rows <- nrow(gps)
   chunk_size = 100000
   num_chunks <- ceiling(total_rows / chunk_size)
+  
+  message(paste("number of chunks:", num_chunks))
   
   for (i in 1:num_chunks) {
     # Calculate start and end indices for current chunk
@@ -31,31 +39,26 @@ df <- data.frame()
     # Extract current chunk
     current_chunk <- gps[start_idx:end_idx, ]
     
-  df_chunk <- raster::extract(nc, current_chunk, method="bilinear", df = TRUE) 
-  df <- bind_rows(df, df_chunk)
+    df_chunk <- raster::extract(nc, current_chunk, method="bilinear", df = TRUE) 
+    df <- bind_rows(df, df_chunk)
+  
+    for(i in c(2:ncol(df))) {
+    year <- as.integer(substr(colnames(df)[i], 2, 5))
+    fileName <- paste(opt[4], gsub("\\.", "_", colnames(df)[i]), sep = "_")
+    
+    write.table(df[,i], file = file.path(output_dir, paste0(fileName, ".txt")),
+                row.names = F, col.names = F, append = T)
   }
-  
-  output_dir <- paste(spat_scale, opt[5], opt[6], sep = "_")
-  
-  if(!dir.exists(output_dir)){
-    dir.create(output_dir)
-  }
-  
-  for(i in c(2:ncol(df))) {
-  year <- as.integer(substr(colnames(df)[i], 2, 5))
-  fileName <- paste(opt[4], gsub("\\.", "_", colnames(df)[i]), sep = "_")
-  write.table(df[,i], file = file.path(output_dir, paste0(fileName, ".txt")),
-   row.names = F, col.names = F)
-  }
-  
+  gc()
+}
 }
 
 files <- list.files(pattern = "CHELSAcmip5ts", recursive = T, full.names = T)
-gps <- read.table(args[1])
+gps <- read.table(args[1])[c(1,2),]
 spat_scale <- args[2]
 
 lapply(files, format_future_ts_climate) 
-    
+
 message("Processing complete. Data saved.")
 
 

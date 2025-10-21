@@ -1,6 +1,10 @@
 data/original_data/
 data/pre_processed_data/
 data/lynx_callibration_data/
+data/Input_data_metadata.xlsx
+data/lynx_other_data/
+observation_data/
+python/__pycache__/
 
 data/coordinates_*.txt
 input_data/

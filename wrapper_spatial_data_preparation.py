@@ -2,7 +2,7 @@ import os
 from python.transform_asc_to_input_txt_map import process_folder
 from python.get_matrix_cell_coordinates import extract_and_transform_coordinates
 
-os.environ["R_HOME"] =  "C:/Users/Z1512834Z/AppData/Local/Programs/R/R-4.4.0"  
+os.environ["R_HOME"] =  "C:\Program Files\R\R-4.5.1"  
 import rpy2.robjects as robjects
 
 # Set variables
@@ -30,7 +30,7 @@ output_peninsula = os.path.join(output_dir, "coordinates_peninsula_500_EPSG4326.
 extract_and_transform_coordinates(rast_file_donana, output_donana)
 extract_and_transform_coordinates(rast_file_peninsula, output_peninsula)
 
-
+# 
 
 
 

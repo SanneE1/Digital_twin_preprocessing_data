@@ -55,41 +55,52 @@ def transform_asc_file(input_path, output_path):
 
 def process_folder(asc_folder, output_folder):
     """
-    Process all .asc files in the specified folder and create corresponding .txt files
-    with "Lynx_" prefix.
+    Process all .asc files in the specified folder and subfolders, creating corresponding .txt files
+    while maintaining the same directory structure.
     
     Args:
         asc_folder (str): Path to the folder containing .asc files
-        output_folder (str): Path to where the  .txt files need to be printed
+        output_folder (str): Path to where the .txt files need to be printed
     """
-    # Make sure both folder path exists
+    # Make sure the source folder exists
     if not os.path.isdir(asc_folder):
         print(f"Error: Folder '{asc_folder}' does not exist")
         return
     
+    # Create the output folder if it doesn't exist
     if not os.path.exists(output_folder):
         os.makedirs(output_folder, exist_ok=True)
-        
-    # Get all .asc files in the folder
-    asc_files = glob.glob(os.path.join(asc_folder, "*.asc"))
+    
+    # Use os.walk to recursively find all .asc files
+    asc_files = []
+    for root, dirs, files in os.walk(asc_folder):
+        for file in files:
+            if file.lower().endswith('.asc'):
+                asc_files.append(os.path.join(root, file))
     
     if not asc_files:
-        print(f"No .asc files found in '{asc_folder}'")
+        print(f"No .asc files found in '{asc_folder}' or its subfolders")
         return
     
     print(f"Found {len(asc_files)} .asc files to process")
     
     # Process each file
     for asc_file in asc_files:
-        # Get directory path and filename
-        dir_path = os.path.dirname(asc_file)
-        filename = os.path.basename(asc_file)
+        # Calculate the relative path from the source folder
+        rel_path = os.path.relpath(asc_file, asc_folder)
         
-        # Create output path with species prefix and .txt extension
+        # Get the directory structure and filename
+        rel_dir = os.path.dirname(rel_path)
+        filename = os.path.basename(rel_path)
+        
+        # Create the corresponding output directory structure
+        output_dir = os.path.join(output_folder, rel_dir) if rel_dir else output_folder
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Create output path with .txt extension
         base_name, _ = os.path.splitext(filename)
         output_filename = f"{base_name}.txt"
-        output_file = os.path.join(output_folder, output_filename)
+        output_file = os.path.join(output_dir, output_filename)
         
         # Transform the file
         transform_asc_file(asc_file, output_file)
-

@@ -103,7 +103,7 @@ library(ggplot2)
 # lambda = 0.1
 # sigma = 2.5
 
-disp_prob <- function(dist, dens, dens_opt = 3, lambda = 0.1, sigma = 2.5) {
+disp_prob <- function(dist, dens, dens_opt = 3, lambda = 0.001, sigma = 1) {
   
   exp(-lambda * (dens - dens_opt)^2) / ((1 + dist)^sigma)
   
