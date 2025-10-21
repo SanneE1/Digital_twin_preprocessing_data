@@ -2,9 +2,12 @@ import os
 from python.download_his_climate_functions import download_point_climate_value
 
 
+os.environ["R_HOME"] =  "C:\Program Files\R\R-4.5.1"  
+import rpy2.robjects as robjects
+
 
 # ========================================================================
-# Parameters set for Donana 
+# Download historical climate Donana CHELSA
 # ========================================================================
  
 input_coord = "data/pre_processed_data/coordinates_donana_500_EPSG4326.txt"
@@ -24,7 +27,7 @@ download_point_climate_value(
 )
 
 # ========================================================================
-# Parameters set for Peninsula 
+# Download historical climate Peninsula CHELSA
 # ========================================================================
  
 input_coord = "data/pre_processed_data/coordinates_peninsula_500_EPSG4326.txt"
@@ -43,6 +46,38 @@ download_point_climate_value(
          wget_file, 
          current_download_location
 )
+
+
+
+# ================================================================================================================================================
+# Format downloaded climate for both downloaded CHELSA values and from WorldClim files already downloaded
+# ================================================================================================================================================
+ 
+robjects.r.source('R/Format_historical_climate_rabbit.R')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

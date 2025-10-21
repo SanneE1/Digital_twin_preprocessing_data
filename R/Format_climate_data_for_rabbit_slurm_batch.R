@@ -1,4 +1,4 @@
-source("R/Formate_climate_data_for_rabbit.R")
+source("R/Format_climate_data_for_rabbit.R")
 
 # Get arguments from command line
 args <- commandArgs(trailingOnly = TRUE)

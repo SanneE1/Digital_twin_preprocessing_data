@@ -21,7 +21,7 @@ calculate_BM_cDM <- function(download_location,
                              year_min = 2002, 
                              year_max = 2018,
                              result_dir,
-                             temperature_type = c("mean", "minmax")) {
+                             temperature_type = c("chelsahist", "chelsafut", "worldclimhist")) {
   
   if (!dir.exists(result_dir)) {dir.create(result_dir)}
   
@@ -31,7 +31,7 @@ calculate_BM_cDM <- function(download_location,
   # Check time range for which we have both rain and temperature information
   files_pr <- list.files(download_location, full.names = TRUE, recursive = TRUE, pattern = "pr")
   
-  if (temperature_type == "mean") {
+  if (temperature_type == "chelsahist") {
     files_tas <- list.files(download_location, full.names = TRUE, recursive = TRUE, pattern = "tas")
     tas_time <- stringr::str_extract(files_tas, '_\\d{2}_\\d{4}_')
     pr_time <- stringr::str_extract(files_pr, '_\\d{2}_\\d{4}_')
@@ -78,7 +78,7 @@ calculate_BM_cDM <- function(download_location,
                     diff_12 = dL[,12] - dL[,11])
   
   # Load initial data for wet/dry calculations (November and December of previous year)
-  if (temperature_type == "mean") {
+  if (temperature_type == "chelsahist") {
     tas_11 <- (read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
                                      pattern = paste0("tas_11_", year_min - 1)))[, 1] / 10) - 273.15
     pr_11 <- read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
@@ -88,7 +88,7 @@ calculate_BM_cDM <- function(download_location,
                                      pattern = paste0("tas_12_", year_min - 1)))[, 1] / 10) - 273.15
     pr_12 <- read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
                                    pattern = paste0("pr_12_", year_min - 1)))[, 1] / 100
-  } else {
+  } else if (temperature_type == "chelsafut"){
     tas_11 <- (rowMeans(cbind(
       read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
                             pattern = paste0("tasmin_X", year_min - 1, "_11")))[, 1],
@@ -106,11 +106,29 @@ calculate_BM_cDM <- function(download_location,
     ))) - 273.15
     pr_12 <- (read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
                                     pattern = paste0("pr_X", year_min - 1, "_12")))[, 1] * 86400 * 30.4)
+  } else if (temperature_type == "worldclimhist") {
+    tas_11 <- (rowMeans(cbind(
+      read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                            pattern = paste("tasmin", year_min - 1, "11", sep = "_")))[, 1],
+      read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                            pattern = paste("tasmax", year_min - 1, "11", sep = "_")))[, 1]
+    )))
+    pr_11 <- (read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                                    pattern = paste("pr", year_min - 1, "11", sep = "_")))[, 1])
+    
+    tas_12 <- (rowMeans(cbind(
+      read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                            pattern = paste("tasmin", year_min - 1, "12", sep = "_")))[, 1],
+      read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                            pattern = paste("tasmax", year_min - 1, "12", sep = "_")))[, 1]
+    )))
+    pr_12 <- (read.table(list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                                    pattern = paste("pr", year_min - 1, "12", sep = "_")))[, 1]) 
   }
   
   # Calculate initial wet/dry conditions
-  wet_2 <- ifelse(pr_11 < (2 * tas_11), FALSE, TRUE)
-  wet_1 <- ifelse(pr_12 < (2 * tas_12), FALSE, TRUE)
+  wet_2 <- ifelse(pr_11 < (2 * tas_11), TRUE, FALSE)
+  wet_1 <- ifelse(pr_12 < (2 * tas_12), TRUE, FALSE)
   
   # Initialize result data frames
   breed_df_empty <- read.table(coord_file)[, c("V3", "V4")]
@@ -133,7 +151,7 @@ calculate_BM_cDM <- function(download_location,
     for (m in 1:12) {
       
       # Load temperature and precipitation data based on type
-      if (temperature_type == "mean") {
+      if (temperature_type == "chelsahist") {
         tas_file <- list.files(download_location, full.names = TRUE, recursive = TRUE, 
                                pattern = paste("tas", sprintf("%02d", m), yr, sep = "_"))
         pr_file <- list.files(download_location, full.names = TRUE, recursive = TRUE, 
@@ -146,7 +164,7 @@ calculate_BM_cDM <- function(download_location,
         tas <- (read.table(tas_file)[, 1] / 10) - 273.15
         pr <- read.table(pr_file)[, 1] / 100
         
-      } else {
+      } else if (temperature_type == "chelsafut"){
         tasmin_file <- list.files(download_location, full.names = TRUE, recursive = TRUE, 
                                   pattern = paste("tasmin", paste0("X", yr), sprintf("%02d", m), sep = "_"))
         tasmax_file <- list.files(download_location, full.names = TRUE, recursive = TRUE, 
@@ -164,35 +182,61 @@ calculate_BM_cDM <- function(download_location,
         tas <- (rowMeans(cbind(read.table(tasmin_file)[, 1], 
                                read.table(tasmax_file)[, 1]))) - 273.15
         pr <- (read.table(pr_file)[, 1] * 86400 * 30.4)
-      }
+        
+        } else if (temperature_type == "worldclimhist"){
+          
+          tasmin_file <- list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                                    pattern = paste("tasmin", yr, sprintf("%02d", m), sep = "_"))
+          tasmax_file <- list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                                    pattern = paste("tasmax", yr, sprintf("%02d", m), sep = "_"))
+          pr_file <- list.files(download_location, full.names = TRUE, recursive = TRUE, 
+                                pattern = paste("pr", yr, sprintf("%02d", m), sep = "_"))
+          
+          if ((length(tasmin_file) != 1) | (length(tasmax_file) != 1) | (length(pr_file) != 1)) {
+            print(paste("tasmin_file:", tasmin_file))
+            print(paste("tasmax_file:", tasmax_file))
+            print(paste("pr_file:", pr_file))
+            stop("Multiple or missing temperature/precipitation files found for specific month/year")
+          }
+          
+          tas <- (rowMeans(cbind(read.table(tasmin_file)[, 1], 
+                                 read.table(tasmax_file)[, 1])))
+          pr <- (read.table(pr_file)[, 1])
+          
+        }
       
       # Get day length and delta for current month
       D <- dL[, m]
       delta <- ddL[, m]
       
       # Calculate W parameter
-      W <- ifelse(wet_1 | wet_2, -1.592, 0)
-      
-      # Update consecutive dry months counter
-      b <- b + 1
-      b[which(W == FALSE)] <- 0
+      W <- ifelse(wet_1 & wet_2, 0, -1.592)
       
       # Calculate breeding probability
       a <- ifelse(P_B(Temp = tas, D = D, delta = delta, W = W) >= 0.5, 1, 0)
+      a[which(is.na(a))] <- -1
+      
+      # Update wet conditions for next iteration
+      wet_2 <- wet_1
+      wet_1 <- ifelse(pr < (2 * tas), TRUE, FALSE)
+      
+      # Update consecutive dry months counter
+      b <- b + 1
+      b[which(wet_1 == FALSE)] <- 0
+      b[which(is.na(W))] <- -1
       
       # Add results to data frames
       breed_df <- cbind(breed_df, a)
       dry_df <- cbind(dry_df, b)
       
-      # Update wet conditions for next iteration
-      wet_2 <- wet_1
-      wet_1 <- ifelse(pr < (2 * tas), FALSE, TRUE)
       
       gc()
     }
     
     colnames(breed_df)[c(3:14)] <- c(1:12)
     colnames(dry_df)[c(3:14)] <- c(1:12)
+    
+    which(is.na(breed_df))
     
     breeding_file <- file.path(result_dir, 
                                paste0("breeding_months_", yr, '.txt'))
